@@ -1,4 +1,4 @@
-import re
+import re, sys
 
 n = int(input())
 pattern = r"(\d\d):(\d\d)-(\d\d):(\d\d)"
@@ -25,13 +25,24 @@ def fill(h1, m1, h2, m2):
 
 cmax, out = 0, "IMPOSSIBLE"
 for i in range(n):
-    h1, m1, h2, m2 = map(int, rec.match(input().strip()).groups())
+    line = input().strip()
+    sys.stderr.write(line + "\n")
+    h1, m1, h2, m2 = map(int, rec.match(line).groups())
     # print(h1, m1, h2, m2)
-    if h1 <= h2:
+    if h1 < h2:
         fill(h1, m1, h2, m2)
-    else:
+    elif h1 > h2:
         fill(h1, m1, 23, 59)
         fill(0, 0, h2, m2)
+    else:
+        if m1 < m2:
+            fill(h1, m1, h2, m2)
+        elif m1 > m2:
+            fill(h1, m1, 23, 59)
+            fill(0, 0, h2, m2)
+        else:
+            tab[h1][m1] = True
+
 hs, ms, he, me = -1, -1, -1, -1
 h, m, c = 0, 0, 0
 cf, hf, mf = 0, -1, -1
@@ -54,11 +65,16 @@ while h < 24:
                 cf = c
             hs, ms, he, me = -1, -1, -1, -1
             c = 0
-        if he == 23 and me == 59 and hf != -1:
+        if he == 23 and me == 59 and cf > 0:
             nc = c + cf
             if nc > cmax:
                 out = '{:02d}:{:02d}-{:02d}:{:02d}'.format(hs, ms, hf, mf)
+        elif he == 23 and me == 59:
+            if c > cmax:
+                out = '{:02d}:{:02d}-{:02d}:{:02d}'.format(hs, ms, he, me)
+                cmax = c
         m += 1
     h += 1
-print(tab[0])
+# print(tab[0])
+sys.stderr.write(f"out->{out}\n\n")
 print(out)
