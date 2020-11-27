@@ -6,9 +6,9 @@ def getMid(s, e):
 
 
 def getXorUtil(st, ss, se, qs, qe, si):
-    if (qs <= ss and qe >= se):
+    if qs <= ss and qe >= se:
         return st[si]
-    if (se < qs or ss > qe):
+    if se < qs or ss > qe:
         return 0
     mid = getMid(ss, se)
 
@@ -17,7 +17,7 @@ def getXorUtil(st, ss, se, qs, qe, si):
 
 
 def getXor(st, n, qs, qe):
-    if (qs < 0 or qe > n - 1 or qs > qe):
+    if qs < 0 or qe > n - 1 or qs > qe:
         return 0
 
     return getXorUtil(st, 0, n - 1, qs, qe, 0)
